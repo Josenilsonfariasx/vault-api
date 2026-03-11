@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'tenant_id',
         'name',
         'email',
         'password',
@@ -42,4 +43,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the tenant that owns the user.
+     */
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
+    /**
+     * Get the account associated with the user.
+     */
+    public function account()
+    {
+        return $this->hasOne(Account::class);
+    }
 }
