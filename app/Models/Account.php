@@ -2,12 +2,21 @@
 
 namespace App\Models;
 
+use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new TenantScope());
+        static::creating(function (self $model) {
+            TenantScope::addTenantIdOnCreating($model);
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
