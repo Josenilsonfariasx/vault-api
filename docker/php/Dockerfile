@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
+    netcat-openbsd \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip \
     && apt-get clean \
@@ -28,7 +29,11 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
+# Copy entrypoint script
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Set working directory
 WORKDIR /var/www
 
-USER $user
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
