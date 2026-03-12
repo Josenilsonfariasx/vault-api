@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\PersonalAccessToken;
 use App\TenantContext;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Use custom PersonalAccessToken that ignores TenantScope
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
     }
 }
