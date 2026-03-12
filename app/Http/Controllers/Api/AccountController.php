@@ -3,23 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\AccountService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
-    public function balance(Request $request)
+    public function __construct(
+        private AccountService $accountService
+    ) {}
+
+    /**
+     * Get the balance for the authenticated user's account.
+     */
+    public function balance(Request $request): JsonResponse
     {
         $user = $request->user();
-        $account = $user->account;
-
-        if (!$account) {
-            return response()->json([
-                'message' => 'Account not found.',
-            ], 404);
-        }
+        $account = $this->accountService->getBalance($user);
 
         return response()->json([
-            'balance' => (string) $account->balance,
+            'data' => [
+                'balance' => $account->balance,
+            ],
         ], 200);
     }
 }
