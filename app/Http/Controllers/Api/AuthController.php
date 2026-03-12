@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     /**
      * @OA\Post(
-     *     path="/api/login",
+     *     path="/api/auth/login",
      *     summary="Login do usuário",
      *     description="Autentica o usuário e retorna um token Bearer",
      *     tags={"Auth"},
@@ -96,7 +96,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/logout",
+     *     path="/api/auth/logout",
      *     summary="Logout do usuário",
      *     description="Revoga o token atual do usuário",
      *     tags={"Auth"},
