@@ -41,6 +41,12 @@ done
 echo "Running migrations..."
 su www -s /bin/bash -c "php artisan migrate --force" || echo "Migration skipped"
 
+# Seeds - only in local environment
+if [ "$APP_ENV" = "local" ]; then
+  echo "Running seeds..."
+  su www -s /bin/bash -c "php artisan db:seed --force" || echo "Seed skipped"
+fi
+
 # Swagger - only generate if not exists or in local
 if [ "$APP_ENV" = "local" ]; then
   if [ ! -f "storage/api-docs/api-docs.json" ]; then
