@@ -15,5 +15,8 @@ php artisan view:cache
 echo "Running migrations..."
 php artisan migrate --force || echo "Migration skipped"
 
-echo "Application ready!"
-exec php-fpm
+# Cria diretório de logs do supervisor
+mkdir -p /var/log/supervisor
+
+echo "Application ready! Starting services..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

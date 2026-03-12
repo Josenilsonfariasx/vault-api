@@ -17,12 +17,14 @@ RUN composer install \
     --ignore-platform-reqs
 
 # ===========================================
-# Stage 2: Final Production Image
+# Stage 2: Final Production Image (PHP-FPM + Nginx)
 # ===========================================
 FROM php:8.3-fpm
 
-# Instala dependências do sistema
+# Instala Nginx, Supervisor e dependências
 RUN apt-get update && apt-get install -y \
+    nginx \
+    supervisor \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -45,6 +47,13 @@ RUN echo "opcache.enable=1" >> "$PHP_INI_DIR/conf.d/opcache.ini" \
     && echo "opcache.max_accelerated_files=20000" >> "$PHP_INI_DIR/conf.d/opcache.ini" \
     && echo "opcache.validate_timestamps=0" >> "$PHP_INI_DIR/conf.d/opcache.ini"
 
+# Configuração do Nginx
+RUN rm /etc/nginx/sites-enabled/default
+COPY docker/php/nginx.prod.conf /etc/nginx/sites-enabled/default
+
+# Configuração do Supervisor
+COPY docker/php/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 WORKDIR /var/www
 
 # Copia vendor do stage anterior
@@ -66,6 +75,6 @@ RUN chown -R www-data:www-data /var/www \
 COPY docker/php/entrypoint.prod.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-EXPOSE 9000
+EXPOSE 80
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
