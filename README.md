@@ -18,20 +18,22 @@ Backend multi-tenant para gestão de contas e transações financeiras. Cada ope
 ## Rodando o projeto
 
 ```bash
-# Subir os containers
+# 1. Copiar o .env primeiro
+cp .env.example .env
+
+# 2. Subir os containers
 docker compose up -d --build
 
-# Instalar dependências
+# 3. Instalar dependências
 docker compose exec app composer install
 
-# Configurar ambiente
-cp .env.example .env
+# 4. Gerar a key
 docker compose exec app php artisan key:generate
 
-# Criar tabelas
+# 5. Criar tabelas
 docker compose exec app php artisan migrate
 
-# Popular dados de teste
+# 6. Popular dados de teste
 docker compose exec app php artisan db:seed --class=TestSeeder
 ```
 
