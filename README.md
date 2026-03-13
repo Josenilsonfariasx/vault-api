@@ -107,12 +107,6 @@ A API possui documentação interativa disponível em:
 http://localhost:8080/api/documentation
 ```
 
-A documentação OpenAPI 3.0 também pode ser acessada em JSON:
-
-```
-http://localhost:8080/docs/api-docs.json
-```
-
 ## Respostas de erro
 
 | Código | Situação                                 | Exemplo de resposta                        |
